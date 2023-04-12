@@ -14,6 +14,7 @@ jobs:
     steps:
       - uses: tgymnich/fork-sync@v1.8
         with:
+          token: ${{ secrets.ACTIONS_TOKEN }}
           owner: databrickslabs
           base: master
           head: master
