@@ -1,0 +1,19 @@
+
+name: Fork Sync
+
+on:
+  schedule:
+    - cron: '0 3 * * 1' # every Monday at 0300
+  workflow_dispatch: # on button click
+
+jobs:
+  sync:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: tgymnich/fork-sync@v1.8
+        with:
+          owner: databrickslabs
+          base: master
+          head: master
