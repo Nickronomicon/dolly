@@ -1,6 +1,7 @@
 import logging
 import re
 from typing import List, Tuple
+import torch
 
 import numpy as np
 from transformers import (
@@ -34,7 +35,7 @@ def load_model_tokenizer_for_generate(
     """
     tokenizer = AutoTokenizer.from_pretrained(pretrained_model_name_or_path, padding_side="left")
     model = AutoModelForCausalLM.from_pretrained(
-        pretrained_model_name_or_path, device_map="auto", trust_remote_code=True
+        pretrained_model_name_or_path, device_map="auto", torch_dtype=torch.bfloat16, trust_remote_code=True
     )
     return model, tokenizer
 
@@ -50,14 +51,14 @@ def get_special_token_id(tokenizer: PreTrainedTokenizer, key: str) -> int:
         key (str): the key to convert to a single token
 
     Raises:
-        RuntimeError: if more than one ID was generated
+        ValueError: if more than one ID was generated
 
     Returns:
         int: the token ID for the given key
     """
     token_ids = tokenizer.encode(key)
     if len(token_ids) > 1:
-        raise RuntimeError(f"Expected only a single token for '{key}' but found {token_ids}")
+        raise ValueError(f"Expected only a single token for '{key}' but found {token_ids}")
     return token_ids[0]
 
 
